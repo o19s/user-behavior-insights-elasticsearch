@@ -9,7 +9,7 @@ For more on UBI and its standard for capturing queries and events, see [o19s/ubi
 ## Building and Running the Plugin
 
 ```
-./gradelw build
+./gradlew build
 docker compose build
 docker compose up
 ```
@@ -98,3 +98,5 @@ The query will be captured:
   }
 }
 ```
+
+Had there been documents indexed and matched the query, the IDs of the documents would have been returned in the `query_response_object_ids` field.
