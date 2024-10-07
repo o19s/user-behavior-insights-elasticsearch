@@ -1,0 +1,24 @@
+services:
+
+  ubi-dev-es:
+    build: ./
+    container_name: ubi-dev-es 
+    environment:
+      discovery.type: single-node
+      node.name: elasticsearch
+      logger.level: info
+      xpack.security.enabled: false
+      xpack.security.enrollment.enabled: false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    ports:
+      - 9200:9200
+      - 9600:9600
+    expose:
+      - 9200
+      - 9600
