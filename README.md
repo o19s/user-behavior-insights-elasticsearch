@@ -1,4 +1,4 @@
-# Elasticsearch User Behavior Insights
+# User Behavior Insights plugin for Elasticsearch
 
 This repository contains a User Behavior Insights (UBI) plugin for Elasticsearch.
 
