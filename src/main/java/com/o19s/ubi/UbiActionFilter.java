@@ -22,6 +22,7 @@ import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.action.ActionRequest;
 import org.elasticsearch.action.ActionResponse;
 import org.elasticsearch.action.DocWriteResponse;
+import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.MultiSearchRequest;
 import org.elasticsearch.action.search.SearchRequest;
@@ -29,11 +30,18 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.support.ActionFilter;
 import org.elasticsearch.action.support.ActionFilterChain;
 import org.elasticsearch.client.internal.Client;
+import org.elasticsearch.cluster.metadata.IndexMetadata;
+import org.elasticsearch.common.io.Streams;
+import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.tasks.Task;
 import com.o19s.ubi.ext.UbiParameters;
 import org.elasticsearch.xcontent.XContentType;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -45,6 +53,10 @@ public class UbiActionFilter implements ActionFilter {
     private static final Logger LOGGER = LogManager.getLogger(UbiActionFilter.class);
 
     private static final String UBI_QUERIES_INDEX = "ubi_queries";
+    private static final String UBI_EVENTS_INDEX = "ubi_events";
+
+    private static final String EVENTS_MAPPING_FILE = "/events-mapping.json";
+    private static final String QUERIES_MAPPING_FILE = "/queries-mapping.json";
 
     private final Client client;
     /**
@@ -171,6 +183,34 @@ public class UbiActionFilter implements ActionFilter {
 
         return response;
 
+    }
+
+    private void createIndexes(final Client client) {
+
+        final Settings indexSettings = Settings.builder()
+                .put(IndexMetadata.INDEX_NUMBER_OF_SHARDS_SETTING.getKey(), 1)
+                .put(IndexMetadata.INDEX_AUTO_EXPAND_REPLICAS_SETTING.getKey(), "0-2")
+                .put(IndexMetadata.SETTING_PRIORITY, Integer.MAX_VALUE)
+                .build();
+
+        final CreateIndexRequest createQueriesIndex = new CreateIndexRequest(UBI_QUERIES_INDEX, indexSettings);
+        createQueriesIndex.mapping(getResourceFile(QUERIES_MAPPING_FILE));
+        client.admin().indices().create(createQueriesIndex);
+
+        final CreateIndexRequest createEventsIndex = new CreateIndexRequest(UBI_EVENTS_INDEX, indexSettings);
+        createEventsIndex.mapping(getResourceFile(EVENTS_MAPPING_FILE));
+        client.admin().indices().create(createEventsIndex);
+
+    }
+
+    private String getResourceFile(final String fileName) {
+        try (InputStream is = UbiActionFilter.class.getResourceAsStream(fileName)) {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            Streams.copy(is.readAllBytes(), out);
+            return out.toString(StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new IllegalStateException("Unable to get mapping from resource [" + fileName + "]", e);
+        }
     }
 
     private void indexQuery(final QueryRequest queryRequest) {
