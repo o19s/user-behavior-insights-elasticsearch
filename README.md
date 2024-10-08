@@ -2,7 +2,9 @@
 
 This repository contains a User Behavior Insights (UBI) plugin for Elasticsearch. This plugin facilitates the capture of queries to build a better understanding of user behavior. For capturing client-side events, refer to the [o19s/ubi](https://github.com/o19s/ubi) repository. A complete reference implementation is available in [o19s/chorus-opensearch-edition](https://github.com/o19s/chorus-opensearch-edition/) and the concepts illustrated in that repository can apply to an Elasticsearch deployment as well.
 
-This plugin was adapted from the [UBI plugin for OpenSearch](https://github.com/opensearch-project/user-behavior-insights).
+This plugin was adapted from the [UBI plugin for OpenSearch](https://github.com/opensearch-project/user-behavior-insights) but it does differ some. This plugin does not support emitting UBI queries as OTel traces. Additionally, this plugin does not yet contain as comprehensive tests.
+
+Join us on the #user-behavior-insights channel of the [Relevance Slack](https://opensourceconnections.com/community/). Please use GitHub issues for suggesting features and identifying bugs.
 
 For more on UBI and its standard for capturing queries and events, see [o19s/ubi](https://github.com/o19s/ubi).
 
