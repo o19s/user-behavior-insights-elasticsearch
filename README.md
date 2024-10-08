@@ -8,7 +8,15 @@ Join us on the #user-behavior-insights channel of the [Relevance Slack](https://
 
 For more on UBI and its standard for capturing queries and events, see [o19s/ubi](https://github.com/o19s/ubi).
 
-## Building and Running the Plugin
+## Using the Plugin in Elasticsearch
+
+Download a release jar or clone and build the project with `./gradlew build`. This will build a jar file under the `./build` directory. Then install the plugin in Elasticsearch:
+
+```
+bin/elasticsearch-plugin install --batch file:/path/to/build/elasticsearch-ubi-1.0.0-SNAPSHOT.zip
+```
+
+## Building and Running the Plugin for Development and Testing
 
 ```
 ./gradlew build
