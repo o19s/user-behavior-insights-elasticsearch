@@ -62,7 +62,6 @@ public class UbiSearchResponse extends SearchResponse {
     @Override
     public XContentBuilder headerToXContent(XContentBuilder builder, ToXContent.Params params) throws IOException {
 
-        //builder.startObject();
         innerToXContentChunked(params);
 
         builder.startObject(EXT_SECTION_NAME);
@@ -70,7 +69,6 @@ public class UbiSearchResponse extends SearchResponse {
         builder.field(UBI_QUERY_ID_FIELD_NAME, this.queryId);
         builder.endObject();
         builder.endObject();
-        //builder.endObject();
 
         return builder;
 

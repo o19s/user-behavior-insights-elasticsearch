@@ -156,16 +156,13 @@ public class UbiActionFilter implements ActionFilter {
 
                 final SearchResponse searchResponse = (SearchResponse) response;
 
-
-                System.out.println(searchResponse.getProfileResults());
-
                 response = new UbiSearchResponse(
                         searchResponse.getHits(),
                         searchResponse.getAggregations(),
                         searchResponse.getSuggest(),
                         searchResponse.isTimedOut(),
                         searchResponse.isTerminatedEarly(),
-                        null,            // TODO: Where is this value?
+                        null,            // TODO: How to get the value for `profileResults`?
                         searchResponse.getNumReducePhases(),
                         searchResponse.getScrollId(),
                         searchResponse.getTotalShards(),
